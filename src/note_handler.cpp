@@ -5,15 +5,15 @@
 static DiatonicMode mode;
 static const int *DEFAULT_DIATONIC_MODE = mode.ionian;
 static const int DEFAULT_TONIC = NOTE_C_4;
-
 static int diatonic_mode[8];
-int active_notes = 0;
 
 static const int NOTE_LOW_DEFAULT = DEFAULT_TONIC;
 static const int NOTE_HIGH_DEFAULT = DEFAULT_TONIC + 12;
 static const int TRANSPOSE_MAX = (127 - (NOTE_HIGH_DEFAULT - NOTE_LOW_DEFAULT)) - NOTE_LOW_DEFAULT;
 static const int TRANSPOSE_MIN = 0 - NOTE_LOW_DEFAULT;
 static int transpose = 0;
+
+int active_notes = 0;
 
 
 
@@ -30,6 +30,7 @@ void initialize_notes()
 {
     transpose = 0;
     set_notes(DEFAULT_TONIC, DEFAULT_DIATONIC_MODE);
+    midi_stop_all_notes();
 }
 
 
@@ -41,35 +42,27 @@ void set_diatonic_mode(int new_mode)
         case 0:
             set_notes(tonic, mode.ionian);
             break;
-
         case 1:
             set_notes(tonic, mode.dorian);
             break;
-
         case 2:
             set_notes(tonic, mode.phrygian);
             break;
-
         case 3:
             set_notes(tonic, mode.lydian);
             break;
-
         case 4:
             set_notes(tonic, mode.mixolydian);
             break;
-
         case 5:
             set_notes(tonic, mode.aeolian);
             break;
-
         case 6:
             set_notes(tonic, mode.locrian);
             break;
-
         case 7:
             set_notes(tonic, mode.ionian);
             break;
-
         default:
             return;
     }

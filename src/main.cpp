@@ -7,12 +7,10 @@
 
 void setup()
 {
-    // pinMode(LED_BUILTIN, OUTPUT);
-    // Serial.begin(115200);
-
     ps3_setup();
     midi_setup();
     initialize_notes();
+    //Serial.begin(115200);
 }
 
 

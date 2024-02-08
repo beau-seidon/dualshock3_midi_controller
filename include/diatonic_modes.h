@@ -3,6 +3,7 @@
 #include <diatonic_intervals.h>
 
 
+
 struct DiatonicMode
 {
     const int ionian[8] =     {P1, M2, M3, P4, P5, M6, M7, P8};   // 0                    w w h w w w h
