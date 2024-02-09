@@ -1,7 +1,7 @@
 # Dualshock3-MIDI-Controller
 ESP32 firmware to convert Dualshock3 bluetooth input to MIDI commands
 
-
+=======
 
 * The D-Pad and Shape buttons play notes when pressed, and are pressure-sensitive so they also send Aftertouch data.
 
@@ -35,7 +35,7 @@ ESP32 firmware to convert Dualshock3 bluetooth input to MIDI commands
 
 To connect the PS3 controller to the ESP32, first determine the MAC address associated with the controller by plugging it in to a PC with a mini-USB cable, and using Sixaxis Pair Tool. 
 
-Type this MAC address intoo the Config.h file before compiling so the controller will think the ESP32 is the "master" (the PS3 it is supposed to be paired with). 
+Type this MAC address into the Config.h file before compiling so the controller will think the ESP32 is the "master" (the PS3 it is supposed to be paired with). 
 Alternatively, use the Sixasis Pair Tool to reassociate the controller with the default MAC already typed into config.h (note: this will unpair it from the PS3 it was associated with).
 
 To receive MIDI via USB serial, I use the Hairless Serial-MIDI bridge software, then send it through the loopMIDI virtual input port into my DAW.
@@ -44,10 +44,12 @@ You can also output MIDI signals using the ESP32 built-in UART, using a DIN or T
 
 
 ## References:
+-----------
 
 https://dronebotworkshop.com/ps3-esp32/
 
 
+### Software
 
 https://www.filehorse.com/download-sixaxispairtool/
 
@@ -56,11 +58,13 @@ https://projectgus.github.io/hairless-midiserial/
 https://www.tobias-erichsen.de/software/loopmidi.html
 
 
+### Code Libraries
 
 https://github.com/jvpernis/esp32-ps3
 
 https://github.com/FortySevenEffects/arduino_midi_library
 
 
+### MIDI Spec
 
 https://www.midi.org/specifications-old/item/midi-din-electrical-specification
