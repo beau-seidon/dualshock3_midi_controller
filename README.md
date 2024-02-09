@@ -3,8 +3,9 @@ ESP32 firmware to convert Dualshock3 bluetooth input to MIDI commands
 
 -----------
 
-> <diagram_placeholder/>
-
+>
+> diagram placeholder
+>
 
 * The D-Pad and Shape buttons play notes when pressed, and are pressure-sensitive so they also send Aftertouch data.
 
@@ -36,8 +37,7 @@ ESP32 firmware to convert Dualshock3 bluetooth input to MIDI commands
 
 
 
-To connect the PS3 controller to the ESP32, first determine the MAC address associated with the controller by plugging it in to a PC with a mini-USB cable, and using Sixaxis Pair Tool. 
-
+To connect the PS3 controller to the ESP32, first determine the MAC address associated with the controller by plugging it in to a PC with a mini-USB cable, and using Sixaxis Pair Tool.  
 Type this MAC address into the Config.h file before compiling so the controller will think the ESP32 is the "master" (the PS3 it is supposed to be paired with).  
 Alternatively, use the Sixasis Pair Tool to reassociate the controller with the default MAC already typed into config.h (note: this will unpair it from the PS3 it was associated with).
 
