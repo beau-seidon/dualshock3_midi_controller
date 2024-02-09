@@ -32,7 +32,7 @@ ESP32 firmware to convert Dualshock3 bluetooth input to MIDI commands
 
 * Pressing Start with PS held will send a NoteOff message for every note on the active channel, in case any get stuck for some reason.
 
-* Pressing Start and Select at the same time will reset transpose to default, and turn all notes off.
+* Pressing Start and Select at the same time will reset transpose and scale mapping to default, and turn all notes off.
 
 
 
