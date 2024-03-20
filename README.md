@@ -28,7 +28,7 @@ ESP32 firmware to convert Dualshock3 bluetooth input to MIDI commands
 
 
 
-* Aftertouch is toggleable between Key and Channel by pressing Select with PS held. (Will add the option to disable aftertouch soon)
+* Aftertouch is toggleable between Key, Channel, or None (default) by pressing Select with PS held.
 
 * Pressing Start with PS held will send a NoteOff message for every note on the active channel, in case any get stuck for some reason.
 
@@ -38,7 +38,7 @@ ESP32 firmware to convert Dualshock3 bluetooth input to MIDI commands
 
 To pair the PS3 controller to the ESP32, first determine the MAC address associated with the controller by connecting to a PC with a mini-USB cable, and using Sixaxis Pair Tool.  
 Type this MAC address into the Config.h file before compiling in PlatformIO, so the controller will think the ESP32 is the "master" (the PS3 it is be paired with).  
-Alternatively, use the Sixasis Pair Tool to reassociate the controller with the default MAC already typed into config.h (note: this will unpair it from any previously associated PS3).
+Alternatively, use the Sixasis Pair Tool to reassociate the controller with the default MAC [1A:2B:3C:01:01:01] already in config.h (note: this will unpair it from any previously associated PS3).
 
 To receive the MIDI output via USB serial, I connect the ESP32 to my PC (no other wires are needed), and use the Hairless Serial-MIDI bridge software, then send it through the loopMIDI virtual input port into my DAW.  
 You could also output MIDI signals from the ESP32 built-in UART, using a DIN or TRS connector via a standard MIDI output buffer circuit, instead of USB into middleware. This would let you plug directly into synths or other hardware. 
