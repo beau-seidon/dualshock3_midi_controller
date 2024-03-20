@@ -1,11 +1,10 @@
 #pragma once
 
-#include <diatonic_intervals.h>
+#include "diatonic_intervals.h"
 
 
 
-struct DiatonicMode
-{
+struct DiatonicMode {
     const int ionian[8] =     {P1, M2, M3, P4, P5, M6, M7, P8};   // 0                    w w h w w w h
     const int dorian[8] =     {P1, M2, m3, P4, P5, M6, m7, P8};   // b7, b3               w h w w w h w
     const int phrygian[8] =   {P1, m2, m3, P4, P5, m6, m7, P8};   // b7, b3, b6, b2       h w w w h w w

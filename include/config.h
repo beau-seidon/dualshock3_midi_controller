@@ -9,8 +9,7 @@
 
 // adjust button order to remap to different pattern of diatonic scale intervals
 // e.g. minor scale intervals in order: I, ii, iii, IV, V, vi, vii, 8va
-enum NOTE_BUTTON{DOWN, UP, CROSS, LEFT, SQUARE, RIGHT, CIRCLE, TRIANGLE};
-
+enum NOTE_BUTTON{ DOWN, UP, CROSS, LEFT, SQUARE, RIGHT, CIRCLE, TRIANGLE };
 
 const byte DEFAULT_MIDI_CHANNEL = 16;
 

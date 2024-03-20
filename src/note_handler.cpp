@@ -1,4 +1,4 @@
-#include <note_handler.h>
+#include "note_handler.h"
 
 
 
@@ -17,26 +17,21 @@ int active_notes = 0;
 
 
 
-void set_notes(int tonic, const int *MODE) 
-{
+void set_notes(int tonic, const int *MODE) {
     for (int n = 0; n < 8; n++) {
         diatonic_mode[n] = tonic + MODE[n];
     }
 }
 
 
-
-void initialize_notes() 
-{
+void initialize_notes() {
     transpose = 0;
     set_notes(DEFAULT_TONIC, DEFAULT_DIATONIC_MODE);
     midi_stop_all_notes();
 }
 
 
-
-void set_diatonic_mode(int new_mode)
-{
+void set_diatonic_mode(int new_mode) {
     int tonic = diatonic_mode[0];
     switch (new_mode) {
         case 0:
@@ -69,24 +64,18 @@ void set_diatonic_mode(int new_mode)
 }
 
 
-
-int get_note_from_button(int button) 
-{
+int get_note_from_button(int button) {
     return diatonic_mode[button];
 }
 
 
-
-void set_active_notes(int adjust)
-{
+void set_active_notes(int adjust) {
     active_notes += adjust;
     if(active_notes < 0) active_notes = 0;
 }
 
 
-
-void set_transpose(int adjust)    // this was made overcomplicated by lack of sleep lol 
-{
+void set_transpose(int adjust) {    // this was made overcomplicated by lack of sleep lol 
     if (active_notes) return;
     int previous_transpose = transpose;
     transpose += adjust;

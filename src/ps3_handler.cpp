@@ -1,4 +1,4 @@
-#include <ps3_handler.h>
+#include "ps3_handler.h"
 
 
 
@@ -7,30 +7,25 @@ static button_state pressed;
 static int player = 0;
 static int battery = 0;
 
-static bool key_aftertouch_enabled = false;
+static int aftertouch_mode = AT_MODE::NONE;
 static byte velocity_pressure = DEFAULT_PRESSURE;
 
 
 
-static void toggle_channel_AT() 
-{
-    if (key_aftertouch_enabled)
-        key_aftertouch_enabled = false;
+static void toggle_aftertouch_mode() {
+    if (aftertouch_mode >= AT_MODE::CHANNEL)
+        aftertouch_mode = AT_MODE::NONE;
     else
-        key_aftertouch_enabled = true;
+        aftertouch_mode++;
 }
 
 
-
-static void set_velocity(byte pressure)
-{
+static void set_velocity(byte pressure) {
     velocity_pressure = max((255 - pressure), 1);
 }
 
 
-
-static void ps3_midi_translate()
-{
+static void ps3_midi_translate() {
 /* Digital D-pad button events */
     if (Ps3.event.button_down.up) {
         if (pressed.ps) {
@@ -78,7 +73,6 @@ static void ps3_midi_translate()
 
     if (Ps3.event.button_up.left)
         midi_sendNoteOff(NOTE_BUTTON::LEFT);
-
 
 
 /* Digital shape button events */
@@ -130,7 +124,6 @@ static void ps3_midi_translate()
         midi_sendNoteOff(NOTE_BUTTON::CIRCLE);
 
 
-
 /* Digital shoulder button events */
     if (Ps3.event.button_down.l1) {
         if (pressed.ps) 
@@ -159,7 +152,6 @@ static void ps3_midi_translate()
     }
 
 
-
 /* Digital trigger button events */
     if (Ps3.event.button_down.l2) {}
 
@@ -169,7 +161,6 @@ static void ps3_midi_translate()
     if (Ps3.event.button_down.r2) {}
 
     if (Ps3.event.button_up.r2) {}
-
 
 
 /* Digital stick button events */
@@ -196,7 +187,7 @@ static void ps3_midi_translate()
 /* Digital select, start, & ps button events */
     if (Ps3.event.button_down.select)
         if (pressed.ps) {
-            toggle_channel_AT();
+            toggle_aftertouch_mode();
         } else if (pressed.start) {
             initialize_notes();
         } else { 
@@ -228,7 +219,6 @@ static void ps3_midi_translate()
         pressed.ps = false;
 
 
-
 /* Analog stick value events */
     if (abs(Ps3.event.analog_changed.stick.lx) > 1) 
         midi_sendCC(left_joystick_x_cc, Ps3.data.analog.stick.lx, false);
@@ -244,42 +234,39 @@ static void ps3_midi_translate()
         midi_sendCC(right_joystick_y_cc, Ps3.data.analog.stick.ry, true);
 
 
-
 /* Analog D-pad button events */
     if (abs(Ps3.event.analog_changed.button.up)) 
-        midi_sendAftertouch(NOTE_BUTTON::UP, Ps3.data.analog.button.up, key_aftertouch_enabled);
+        midi_sendAftertouch(NOTE_BUTTON::UP, Ps3.data.analog.button.up, aftertouch_mode);
 
 
     if (abs(Ps3.event.analog_changed.button.right)) 
-        midi_sendAftertouch(NOTE_BUTTON::RIGHT, Ps3.data.analog.button.right, key_aftertouch_enabled);
+        midi_sendAftertouch(NOTE_BUTTON::RIGHT, Ps3.data.analog.button.right, aftertouch_mode);
 
     
     if (abs(Ps3.event.analog_changed.button.down))
-        midi_sendAftertouch(NOTE_BUTTON::DOWN, Ps3.data.analog.button.down, key_aftertouch_enabled);
+        midi_sendAftertouch(NOTE_BUTTON::DOWN, Ps3.data.analog.button.down, aftertouch_mode);
 
     
     if (abs(Ps3.event.analog_changed.button.left))
-        midi_sendAftertouch(NOTE_BUTTON::LEFT, Ps3.data.analog.button.left, key_aftertouch_enabled);
-
+        midi_sendAftertouch(NOTE_BUTTON::LEFT, Ps3.data.analog.button.left, aftertouch_mode);
 
 
 /* Analog shape button events */
     if (abs(Ps3.event.analog_changed.button.triangle))
-        midi_sendAftertouch(NOTE_BUTTON::TRIANGLE, Ps3.data.analog.button.triangle, key_aftertouch_enabled);
+        midi_sendAftertouch(NOTE_BUTTON::TRIANGLE, Ps3.data.analog.button.triangle, aftertouch_mode);
 
 
     if (abs(Ps3.event.analog_changed.button.circle))
-        midi_sendAftertouch(NOTE_BUTTON::CIRCLE, Ps3.data.analog.button.circle, key_aftertouch_enabled);
+        midi_sendAftertouch(NOTE_BUTTON::CIRCLE, Ps3.data.analog.button.circle, aftertouch_mode);
 
     
     if (abs(Ps3.event.analog_changed.button.cross))
-        midi_sendAftertouch(NOTE_BUTTON::CROSS, Ps3.data.analog.button.cross, key_aftertouch_enabled);
+        midi_sendAftertouch(NOTE_BUTTON::CROSS, Ps3.data.analog.button.cross, aftertouch_mode);
 
     
     if (abs(Ps3.event.analog_changed.button.square))
-        midi_sendAftertouch(NOTE_BUTTON::SQUARE, Ps3.data.analog.button.square, key_aftertouch_enabled);
+        midi_sendAftertouch(NOTE_BUTTON::SQUARE, Ps3.data.analog.button.square, aftertouch_mode);
         
-
 
 /* Analog shoulder & trigger button events */
     if (abs(Ps3.event.analog_changed.button.l1)) {
@@ -293,7 +280,6 @@ static void ps3_midi_translate()
         midi_sendPitchBend(Ps3.data.analog.button.r2, Ps3.data.analog.button.l2);
     
     
-
 /* Battery events */
     if (battery != Ps3.data.status.battery) {
         battery = Ps3.data.status.battery;
@@ -309,9 +295,7 @@ static void ps3_midi_translate()
 }
 
 
-
-// static void set_LEDs(int channel)
-// {
+// static void set_LEDs(int channel) {
 //     ps3_cmd_t *cmd;
 //     switch (channel) {
 //     case 16:
@@ -437,27 +421,21 @@ static void ps3_midi_translate()
 // }
 
 
-
-static void set_player()
-{
+static void set_player() {
     player = midi_get_active_channel();
     // Serial.print("Setting LEDs to player "); Serial.println(player, DEC);       
     Ps3.setPlayer(player); 
 }
 
 
-
-void onConnect()
-{
+void onConnect() {
     // Serial.println("Connected.");
     Ps3.setPlayer(1);
     // set_LEDs(midi_get_active_channel());
 }
 
 
-
-void ps3_setup()
-{
+void ps3_setup() {
     Ps3.attach(ps3_midi_translate);
     Ps3.attachOnConnect(onConnect);
     Ps3.begin(CURRENT_MASTER_MAC);
