@@ -1,4 +1,4 @@
-# Dualshock3-MIDI-Controller
+# Dualshock3_MIDI_Controller
 ESP32 firmware to convert Dualshock3 bluetooth input to MIDI commands
 
 -----------
