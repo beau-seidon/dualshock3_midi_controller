@@ -75,13 +75,13 @@ void set_active_notes(int adjust) {
 }
 
 
-void set_transpose(int adjust) {    // this was made overcomplicated by lack of sleep lol 
+void set_transpose(int adjust) {    // this was made overcomplicated by lack of sleep lol
     if (active_notes) return;
     int previous_transpose = transpose;
     transpose += adjust;
     if (transpose > TRANSPOSE_MAX) transpose = TRANSPOSE_MAX;
     if (transpose < TRANSPOSE_MIN) transpose = TRANSPOSE_MIN;
- 
+
     int tonic = diatonic_mode[0];
     for (int n = 0; n < 8; n++) {
         diatonic_mode[n] += (transpose - previous_transpose);

@@ -45,7 +45,7 @@ static void ps3_midi_translate() {
         } else {
             midi_sendNoteOn(NOTE_BUTTON::RIGHT, velocity_pressure);
         }
-    } 
+    }
 
     if (Ps3.event.button_up.right)
         midi_sendNoteOff(NOTE_BUTTON::RIGHT);
@@ -126,7 +126,7 @@ static void ps3_midi_translate() {
 
 /* Digital shoulder button events */
     if (Ps3.event.button_down.l1) {
-        if (pressed.ps) 
+        if (pressed.ps)
             midi_change_channel(-1);
         else {
             pressed.L1 = true;
@@ -135,10 +135,10 @@ static void ps3_midi_translate() {
 
     if (Ps3.event.button_up.l1)
         pressed.L1 = false;
-    
+
 
     if (Ps3.event.button_down.r1) {
-        if (pressed.ps) 
+        if (pressed.ps)
             midi_change_channel(1);
         else {
             pressed.R1 = true;
@@ -147,7 +147,7 @@ static void ps3_midi_translate() {
     }
 
     if (Ps3.event.button_up.r1) {
-        pressed.R1 = false; 
+        pressed.R1 = false;
         midi_toggleCC(right_shoulder_cc, false);
     }
 
@@ -190,7 +190,7 @@ static void ps3_midi_translate() {
             toggle_aftertouch_mode();
         } else if (pressed.start) {
             initialize_notes();
-        } else { 
+        } else {
             pressed.select = true;
         }
 
@@ -203,8 +203,8 @@ static void ps3_midi_translate() {
             midi_stop_all_notes();
         } else if (pressed.select) {
             initialize_notes();
-        } else {  
-            pressed.start = true; 
+        } else {
+            pressed.start = true;
         }
     }
 
@@ -220,14 +220,14 @@ static void ps3_midi_translate() {
 
 
 /* Analog stick value events */
-    if (abs(Ps3.event.analog_changed.stick.lx) > 1) 
+    if (abs(Ps3.event.analog_changed.stick.lx) > 1)
         midi_sendCC(left_joystick_x_cc, Ps3.data.analog.stick.lx, false);
 
     if (abs(Ps3.event.analog_changed.stick.ly) > 1)
         midi_sendCC(left_joystick_y_cc, Ps3.data.analog.stick.ly, true);
 
 
-    if (abs(Ps3.event.analog_changed.stick.rx) > 1) 
+    if (abs(Ps3.event.analog_changed.stick.rx) > 1)
         midi_sendCC(right_joystick_x_cc, Ps3.data.analog.stick.rx, false);
 
     if (abs(Ps3.event.analog_changed.stick.ry) > 1)
@@ -235,18 +235,18 @@ static void ps3_midi_translate() {
 
 
 /* Analog D-pad button events */
-    if (abs(Ps3.event.analog_changed.button.up)) 
+    if (abs(Ps3.event.analog_changed.button.up))
         midi_sendAftertouch(NOTE_BUTTON::UP, Ps3.data.analog.button.up, aftertouch_mode);
 
 
-    if (abs(Ps3.event.analog_changed.button.right)) 
+    if (abs(Ps3.event.analog_changed.button.right))
         midi_sendAftertouch(NOTE_BUTTON::RIGHT, Ps3.data.analog.button.right, aftertouch_mode);
 
-    
+
     if (abs(Ps3.event.analog_changed.button.down))
         midi_sendAftertouch(NOTE_BUTTON::DOWN, Ps3.data.analog.button.down, aftertouch_mode);
 
-    
+
     if (abs(Ps3.event.analog_changed.button.left))
         midi_sendAftertouch(NOTE_BUTTON::LEFT, Ps3.data.analog.button.left, aftertouch_mode);
 
@@ -259,27 +259,27 @@ static void ps3_midi_translate() {
     if (abs(Ps3.event.analog_changed.button.circle))
         midi_sendAftertouch(NOTE_BUTTON::CIRCLE, Ps3.data.analog.button.circle, aftertouch_mode);
 
-    
+
     if (abs(Ps3.event.analog_changed.button.cross))
         midi_sendAftertouch(NOTE_BUTTON::CROSS, Ps3.data.analog.button.cross, aftertouch_mode);
 
-    
+
     if (abs(Ps3.event.analog_changed.button.square))
         midi_sendAftertouch(NOTE_BUTTON::SQUARE, Ps3.data.analog.button.square, aftertouch_mode);
-        
+
 
 /* Analog shoulder & trigger button events */
     if (abs(Ps3.event.analog_changed.button.l1)) {
         set_velocity(Ps3.data.analog.button.l1);
-    }  
-    
+    }
+
     if (abs(Ps3.event.analog_changed.button.r1)) {}
 
 
     if (abs(Ps3.event.analog_changed.button.l2) || abs(Ps3.event.analog_changed.button.r2))
         midi_sendPitchBend(Ps3.data.analog.button.r2, Ps3.data.analog.button.l2);
-    
-    
+
+
 /* Battery events */
     if (battery != Ps3.data.status.battery) {
         battery = Ps3.data.status.battery;
@@ -368,7 +368,7 @@ static void ps3_midi_translate() {
 //         cmd->led3 = 1;
 //         cmd->led4 = 0;
 //         break;
-        
+
 //     case 6:
 //         cmd->led1 = 0;
 //         cmd->led2 = 1;
@@ -423,8 +423,8 @@ static void ps3_midi_translate() {
 
 static void set_player() {
     player = midi_get_active_channel();
-    // Serial.print("Setting LEDs to player "); Serial.println(player, DEC);       
-    Ps3.setPlayer(player); 
+    // Serial.print("Setting LEDs to player "); Serial.println(player, DEC);
+    Ps3.setPlayer(player);
 }
 
 
