@@ -1,4 +1,4 @@
-# Dualshock3_MIDI_Controller
+# Dualshock3 MIDI Controller
 ESP32 firmware to convert Dualshock3 bluetooth input to MIDI commands
 
 -----------
@@ -15,9 +15,9 @@ ESP32 firmware to convert Dualshock3 bluetooth input to MIDI commands
 * The joysticks send data on 4 CC voices, one for each axis of each joystick. The CC numbers are Lx:20, Ly:21, Rx:22, Ry:23.
 
 * Pressing the joysticks in will transpose the set of notes that the other buttons play. L3 transposes down 1 octove, and R3 transposes up 1 octave. Transpose is disabled while any note buttons are pressed, to avoid stuck notes.
- 
 
- 
+
+
 * The PS button is used as a modifer for other buttons to call secondary functions.
 
 * With PS held, the D-Pad and Shape buttons will change the button map to different notes corresponding to the selected diatonic scale.
@@ -36,12 +36,12 @@ ESP32 firmware to convert Dualshock3 bluetooth input to MIDI commands
 
 
 
-To pair the PS3 controller to the ESP32, first determine the MAC address associated with the controller by connecting to a PC with a mini-USB cable, and using Sixaxis Pair Tool.  
-Type this MAC address into the Config.h file before compiling in PlatformIO, so the controller will think the ESP32 is the "master" (the PS3 it is be paired with).  
+To pair the PS3 controller to the ESP32, first determine the MAC address associated with the controller by connecting to a PC with a mini-USB cable, and using Sixaxis Pair Tool.
+Type this MAC address into the Config.h file before compiling in PlatformIO, so the controller will think the ESP32 is the "master" (the PS3 it is be paired with).
 Alternatively, use the Sixasis Pair Tool to reassociate the controller with the default MAC [1A:2B:3C:01:01:01] already in config.h (note: this will unpair it from any previously associated PS3).
 
-To receive the MIDI output via USB serial, I connect the ESP32 to my PC (no other wires are needed), and use the Hairless Serial-MIDI bridge software, then send it through the loopMIDI virtual input port into my DAW.  
-You could also output MIDI signals from the ESP32 built-in UART, using a DIN or TRS connector via a standard MIDI output buffer circuit, instead of USB into middleware. This would let you plug directly into synths or other hardware. 
+To receive the MIDI output via USB serial, I connect the ESP32 to my PC (no other wires are needed), and use the Hairless Serial-MIDI bridge software, then send it through the loopMIDI virtual input port into my DAW.
+You could also output MIDI signals from the ESP32 built-in UART, using a DIN or TRS connector via a standard MIDI output buffer circuit, instead of USB into middleware. This would let you plug directly into synths or other hardware.
 
 
 ![](/other%20resources/images/Dualshock3_MIDI_Adapter.jpg)
