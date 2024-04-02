@@ -44,6 +44,9 @@ To receive the MIDI output via USB serial, I connect the ESP32 to my PC (no othe
 You could also output MIDI signals from the ESP32 built-in UART, using a DIN or TRS connector via a standard MIDI output buffer circuit, instead of USB into middleware. This would let you plug directly into synths or other hardware. 
 
 
+![](/other%20resources/images/Dualshock3_MIDI_Adapter.jpg)
+
+
 
 ## References:
 
