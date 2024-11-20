@@ -1,13 +1,15 @@
 #include "midi_handler.h"
 
 
+MIDI_CREATE_INSTANCE(HardwareSerial, Serial2, dinMIDI);
 
 struct CustomBaudRateSettings : public MIDI_NAMESPACE::DefaultSerialSettings {
   static const long BaudRate = 115200;
 };
 
 MIDI_NAMESPACE::SerialMIDI<HardwareSerial, CustomBaudRateSettings> serialMIDI(Serial);
-MIDI_NAMESPACE::MidiInterface<MIDI_NAMESPACE::SerialMIDI<HardwareSerial, CustomBaudRateSettings>> MIDI((MIDI_NAMESPACE::SerialMIDI<HardwareSerial, CustomBaudRateSettings>&)serialMIDI);
+MIDI_NAMESPACE::MidiInterface<MIDI_NAMESPACE::SerialMIDI<HardwareSerial, CustomBaudRateSettings>> usbMIDI((MIDI_NAMESPACE::SerialMIDI<HardwareSerial, CustomBaudRateSettings>&)serialMIDI);
+
 
 static byte active_midi_channel = DEFAULT_MIDI_CHANNEL;
 
@@ -16,21 +18,24 @@ static byte aftertouch_pressure[8] = {0};
 
 
 void midi_setup() {
-    MIDI.begin(MIDI_CHANNEL_OMNI);
+    usbMIDI.begin(MIDI_CHANNEL_OMNI);
+    dinMIDI.begin(MIDI_CHANNEL_OMNI);
 }
 
 
 void midi_sendNoteOn(byte note_button, byte button_pressure) {
     byte note = get_note_from_button(note_button);
     byte velocity = (byte)map(button_pressure, 0, 255, 1, 127);
-    MIDI.sendNoteOn(note, velocity, active_midi_channel);
+    usbMIDI.sendNoteOn(note, velocity, active_midi_channel);
+    dinMIDI.sendNoteOn(note, velocity, active_midi_channel);
     set_active_notes(1);
 }
 
 
 void midi_sendNoteOff(byte note_button) {
     byte note = get_note_from_button(note_button);
-    MIDI.sendNoteOff(note, 0, active_midi_channel);
+    usbMIDI.sendNoteOff(note, 0, active_midi_channel);
+    dinMIDI.sendNoteOff(note, 0, active_midi_channel);
     set_active_notes(-1);
 }
 
@@ -57,11 +62,13 @@ void midi_sendAftertouch(byte note_button, byte button_pressure, int aftertouch_
     switch(aftertouch_mode) {
         case AT_MODE::KEY:
             pressure = (byte)map(button_pressure, 0, 255, 0, 127);
-            MIDI.sendAfterTouch(note, pressure, active_midi_channel);        // key aftertouch
+            usbMIDI.sendAfterTouch(note, pressure, active_midi_channel);        // key aftertouch
+            dinMIDI.sendAfterTouch(note, pressure, active_midi_channel);        // key aftertouch
             break;
         case AT_MODE::CHANNEL:
             pressure = calculate_channel_aftertouch(note_button, button_pressure);
-            MIDI.sendAfterTouch(pressure, active_midi_channel);              // channel aftertouch
+            usbMIDI.sendAfterTouch(pressure, active_midi_channel);              // channel aftertouch
+            dinMIDI.sendAfterTouch(pressure, active_midi_channel);              // channel aftertouch
             break;
         default:
             break;
@@ -75,22 +82,27 @@ void midi_sendCC(byte cc_number, int axis_value, bool invert_axis) {
         value = (byte)map(axis_value, 127, -128, 0, 127);
     else
         value = (byte)map(axis_value, -128, 127, 0, 127);
-    MIDI.sendControlChange(cc_number, value, active_midi_channel);
+    usbMIDI.sendControlChange(cc_number, value, active_midi_channel);
+    dinMIDI.sendControlChange(cc_number, value, active_midi_channel);
 }
 
 
 void midi_toggleCC(byte cc_number, bool active) {
-    if (active)
-        MIDI.sendControlChange(cc_number, 127, active_midi_channel);
-    else
-        MIDI.sendControlChange(cc_number, 0, active_midi_channel);
+    if (active) {
+        usbMIDI.sendControlChange(cc_number, 127, active_midi_channel);
+        dinMIDI.sendControlChange(cc_number, 127, active_midi_channel);
+    } else {
+        usbMIDI.sendControlChange(cc_number, 0, active_midi_channel);
+        dinMIDI.sendControlChange(cc_number, 0, active_midi_channel);
+    }
 }
 
 
 void midi_sendPitchBend(byte up_trigger_value, byte down_trigger_value) {
     int net_trigger_value = up_trigger_value - down_trigger_value;
     int bend = (int)map(net_trigger_value, -255, 255, MIDI_PITCHBEND_MIN, MIDI_PITCHBEND_MAX);
-    MIDI.sendPitchBend(bend, active_midi_channel);
+    usbMIDI.sendPitchBend(bend, active_midi_channel);
+    dinMIDI.sendPitchBend(bend, active_midi_channel);
 }
 
 
@@ -110,7 +122,8 @@ void midi_change_channel(int increment) {
 
 void midi_stop_all_notes() {
     for (int i = 0; i < 128; i++) {
-        MIDI.sendNoteOff(i, 0, active_midi_channel);
+        usbMIDI.sendNoteOff(i, 0, active_midi_channel);
+        dinMIDI.sendNoteOff(i, 0, active_midi_channel);
         set_active_notes(-1);
     }
 }

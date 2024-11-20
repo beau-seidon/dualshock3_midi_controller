@@ -8,11 +8,11 @@ ESP32 firmware to convert Dualshock3 bluetooth input to MIDI commands
 
 * L1 pressure sensor acts as a Note Velocity damper; the unpressed default is full volume, and newly played notes will be quieter as L1 is pressed harder.
 
-* R1 acts like a sustain pedal; it sends a momentary MIDI CC64 to hold played notes until R1 is released.
+* R1 acts like a sustain pedal; it sends a momentary MIDI CC64 to hold played notes until R1 is released, if the synth supports it.
 
 * The L2 and R2 triggers send pitch bend data.
 
-* The joysticks send data on 4 CC voices, one for each axis of each joystick. The CC numbers are Lx:20, Ly:21, Rx:22, Ry:23.
+* The joysticks send CC data, one control for each axis of each joystick. The CC numbers are Lx:20, Ly:21, Rx:22, Ry:23. Center value is 63.
 
 * Pressing the joysticks in will transpose the set of notes that the other buttons play. L3 transposes down 1 octove, and R3 transposes up 1 octave. Transpose is disabled while any note buttons are pressed, to avoid stuck notes.
 
@@ -30,7 +30,7 @@ ESP32 firmware to convert Dualshock3 bluetooth input to MIDI commands
 
 * Aftertouch is toggleable between Key, Channel, or None (default) by pressing Select with PS held.
 
-* Pressing Start with PS held will send a NoteOff message for every note on the active channel, in case any get stuck for some reason.
+* Pressing Start with PS held will send a NoteOff message for every note on the active channel, in case any get stuck for some reason. This is an internal function, not a MIDI CC 123 "All Notes Off" message.
 
 * Pressing Start and Select at the same time will reset transpose and scale mapping to default, and turn all notes off.
 
@@ -41,7 +41,7 @@ Type this MAC address into the Config.h file before compiling in PlatformIO, so 
 Alternatively, use the Sixasis Pair Tool to reassociate the controller with the default MAC [1A:2B:3C:01:01:01] already in config.h (note: this will unpair it from any previously associated PS3).
 
 To receive the MIDI output via USB serial, I connect the ESP32 to my PC (no other wires are needed), and use the Hairless Serial-MIDI bridge software, then send it through the loopMIDI virtual input port into my DAW.
-You could also output MIDI signals from the ESP32 built-in UART, using a DIN or TRS connector via a standard MIDI output buffer circuit, instead of USB into middleware. This would let you plug directly into synths or other hardware.
+The ESP-32 also sends MIDI data from its built-in UART2 TX pin. Patch it to a synth or interface using a DIN-5 or TRS connector via a standard MIDI output buffer circuit, instead of USB into middleware.
 
 
 ![](/other%20resources/images/Dualshock3_MIDI_Adapter.jpg)
