@@ -41,7 +41,7 @@ Type this MAC address into the Config.h file before compiling in PlatformIO, so 
 Alternatively, use the Sixasis Pair Tool to reassociate the controller with the default MAC [1A:2B:3C:01:01:01] already in config.h (note: this will unpair it from any previously associated PS3).
 
 To receive the MIDI output via USB serial, I connect the ESP32 to my PC (no other wires are needed), and use the Hairless Serial-MIDI bridge software, then send it through the loopMIDI virtual input port into my DAW.
-The ESP-32 also sends MIDI data from its built-in UART2 TX pin. Patch it to a synth or interface using a DIN-5 or TRS connector via a standard MIDI output buffer circuit, instead of USB into middleware.
+The ESP32 also sends MIDI data from its built-in UART2 TX pin (GPIO17). Patch it to a synth or interface using a DIN-5 or TRS connector via a standard MIDI output buffer circuit, instead of USB into middleware.
 
 
 ![](/other%20resources/images/Dualshock3_MIDI_Adapter.jpg)
